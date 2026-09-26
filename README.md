@@ -135,7 +135,7 @@ docs/                  REPRODUCE.md and the images used in this README
 
 ## Pretrained weights
 
-The best-validation checkpoints of the three full models are attached to the **Releases** page (`wavefusion_gopro_best.pth`, `wavefusion_hide_best.pth`, `wavefusion_realblurj_best.pth`, about 114 MB each). Each file is a dictionary with the keys `model_state_dict`, `epoch`, `val_psnr` and `val_ssim`; load `model_state_dict` into the `WaveFusionNet` class defined in the notebooks under `train/`. The stored validation scores are 29.70 dB (GoPro, epoch 100), 26.45 dB (HIDE, epoch 35) and 30.08 dB (RealBlur-J, epoch 70).
+The best-validation checkpoints of the three full models are attached to the **Releases** page (`wavefusion_gopro_best.pth`, `wavefusion_hide_best.pth`, `wavefusion_realblurj_best.pth`, about 110 MB each). Each file is a dictionary with the keys `model_state_dict`, `epoch`, `val_psnr` and `val_ssim`; load `model_state_dict` into the `WaveFusionNet` class defined in the notebooks under `train/`. The stored validation scores are 29.70 dB (GoPro, epoch 100), 26.45 dB (HIDE, epoch 35) and 30.08 dB (RealBlur-J, epoch 70).
 
 ## Honest notes
 
