@@ -29,6 +29,7 @@ A Kaggle session lasts 12 hours and each run below takes about 10, so there is r
 | `ablation/realblurj_fixed_fusion_part1_interrupted.ipynb` then `..._part2_resumed_from_epoch50.ipynb` | Fixed concatenation; interrupted at epoch 50, resumed with a fresh AdamW state | RealBlur-J | 29.55 / 0.8841 | local RTX 5060 |
 | `ablation/realblurj_spatial_only.ipynb` | Wavelet branch and fusion removed | RealBlur-J | 29.53 / 0.8819 | Kaggle |
 | `ablation/new_runs/gopro_l1only_loss.ipynb` | L1 loss only | GoPro | 28.28 / 0.8652 | Kaggle |
+| `ablation/new_runs/gopro_no_stripattention.ipynb` | StripAttention replaced by identity | GoPro | 28.75 / 0.8741 | Kaggle |
 | `ablation/new_runs/realblurj_l1only_loss.ipynb` | L1 loss only | RealBlur-J | 29.18 / 0.8775 | Kaggle |
 | `ablation/new_runs/realblurj_no_stripattention.ipynb` | StripAttention replaced by identity | RealBlur-J | 29.57 / 0.8836 | Kaggle |
 | `ablation/new_runs/realblurj_seed7_full_model.ipynb` | Training seed 7 (split seed stays 42) | RealBlur-J | 29.57 / 0.8841 | Kaggle |

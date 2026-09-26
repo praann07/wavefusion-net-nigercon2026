@@ -23,7 +23,7 @@ WaveFusion-Net removes motion and camera-shake blur from a single photo. A NAFNe
 
 - **Best score on RealBlur-J among the methods we compared: 29.57 dB / 0.8839 SSIM**, +0.61 dB over Restormer and +0.87 dB over MPRNet, with 2.7x fewer parameters than Restormer.
 - **Leakage-free by construction.** A seeded 90/10 train/validation split, the checkpoint chosen on validation only, and the test set evaluated once. The SHA256 hash of every split is published and can be checked with one command.
-- **Ablations, including the ones that did not help.** We removed the wavelet branch, the learned gate, StripAttention, and all four auxiliary losses, and report every result, including a null result for StripAttention.
+- **Ablations, including the ones that did not help.** We removed the wavelet branch, the learned gate, StripAttention, and all four auxiliary losses, and report every result, including a null result for StripAttention on RealBlur-J.
 - **Everything is a notebook.** Import one into Kaggle, attach the dataset, press *Run All*.
 
 ## Results
@@ -72,7 +72,7 @@ Every variant uses the same seed, the same identical split, the same loss and th
 | Full model, training seed 7 | 9.48M | - | **29.57 / 0.8841** |
 | Fixed-Fusion (no learned gate) | 9.39M | 28.79 / 0.8748 | 29.55 / **0.8841** |
 | Spatial-Only (no wavelet branch) | 5.31M | 28.69 / 0.8730 | 29.53 / 0.8819 |
-| No StripAttention | 9.18M | - | **29.57** / 0.8836 |
+| No StripAttention | 9.18M | 28.75 / 0.8741 | **29.57** / 0.8836 |
 | L1-only loss | 9.48M | 28.28 / 0.8652 | 29.18 / 0.8775 |
 
 What the numbers say:
@@ -80,7 +80,7 @@ What the numbers say:
 - **The multi-term loss is the largest single contributor we measured:** L1-only costs 0.55 dB on GoPro and 0.39 dB on RealBlur-J. The four auxiliary terms were removed together, so this does not say which of them matters.
 - **The wavelet branch helps** on both datasets (+0.14 dB GoPro, +0.04 dB RealBlur-J) at a cost of 4.2M extra parameters (9,484,659 vs 5,305,635).
 - **The learned gate is a small gain** (+0.04 dB GoPro, +0.02 dB RealBlur-J) for 92,448 parameters, under 1% of the model. On RealBlur-J that is at the level of seed-to-seed noise.
-- **StripAttention shows no measurable effect on RealBlur-J** (29.57 dB with and without it), and it accounts for 3.2% of the parameters.
+- **StripAttention is a small gain at most:** removing it costs 0.08 dB on GoPro and nothing on RealBlur-J (29.57 dB with and without it), for 3.2% of the parameters. Both numbers come from single runs.
 - Every row is a single run except the full model on RealBlur-J, which has two seeds. HIDE was not ablated: one run takes about 11 hours.
 
 ## How it works
@@ -110,7 +110,7 @@ The model has 9,484,659 parameters and needs 19.57 GMACs at 192x192.
 | HIDE (5,727 / 636 / 1,329) | `e62b33858f1b` | `34a1110dae60` | `e216a016ecbd` |
 | RealBlur-J (3,383 / 375 / 980) | `af1027140302` | `8431800b03e0` | `2a98ebbf6075` |
 
-Check that all 11 runs in this repository share these splits:
+Check that all 12 runs in this repository share these splits:
 
 ```bash
 python scripts/verify_splits.py
@@ -142,7 +142,6 @@ The best-validation checkpoints of the three full models are attached to the **R
 - Results are single runs, apart from the two-seed check on RealBlur-J. Run-to-run variation is small on RealBlur-J but is only measured there.
 - The RealBlur-J Fixed-Fusion run was interrupted by a system sleep at epoch 50 and **resumed from the epoch-50 weights with a fresh AdamW state**. The two notebooks in `ablation/` are its two halves, and the split hashes were verified identical.
 - Some ablations ran on a local RTX 5060 and the rest on Kaggle, so the notebooks carry outputs from both.
-- The StripAttention ablation on GoPro is not included.
 
 ## Citation
 
