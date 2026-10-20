@@ -78,7 +78,7 @@ Every variant uses the same seed, the same identical split, the same loss and th
 What the numbers say:
 
 - **The multi-term loss is the largest single contributor we measured:** L1-only costs 0.55 dB on GoPro and 0.39 dB on RealBlur-J. The four auxiliary terms were removed together, so this does not say which of them matters.
-- **The wavelet branch helps** on both datasets (+0.14 dB GoPro, +0.04 dB RealBlur-J) at a cost of 4.2M extra parameters (9,484,659 vs 5,305,635).
+- **The wavelet branch helps** on both datasets (+0.14 dB GoPro, +0.04 dB RealBlur-J) at a cost of 4.2M extra parameters (9,484,659 vs 5,305,635). Only about 0.46M of these affect the output; 3.72M sit in the unused high-frequency path and third wavelet level, so the gain is due to the multi-scale LL pathway and its gated fusion.
 - **The learned gate is a small gain** (+0.04 dB GoPro, +0.02 dB RealBlur-J) for 92,448 parameters, under 1% of the model. On RealBlur-J that is at the level of seed-to-seed noise.
 - **StripAttention is a small gain at most:** removing it costs 0.08 dB on GoPro and nothing on RealBlur-J (29.57 dB with and without it), for 3.2% of the parameters. Both numbers come from single runs.
 - Every row is a single run except the full model on RealBlur-J, which has two seeds. HIDE was not ablated: one run takes about 11 hours.
@@ -87,8 +87,8 @@ What the numbers say:
 
 | Piece | What it does |
 |---|---|
-| **Spatial branch** | A U-shaped encoder-decoder of NAFBlocks (SimpleGate and Simplified Channel Attention, no activation functions), with 48 to 384 channels and (4, 6, 6, 4) blocks per level |
-| **Wavelet branch** | A fixed, non-trainable 2x2 Haar transform splits features into LL, LH, HL and HH subbands, and WaveletBlocks process the smooth part and the three directional parts on separate paths |
+| **Spatial branch** | A U-shaped encoder-decoder of NAFBlocks (SimpleGate and Simplified Channel Attention, no activation functions), with 48 to 384 channels, (4, 6, 6) NAFBlocks in the encoder, (6, 6, 4) in the decoder and 3 in the bottleneck |
+| **Wavelet branch** | A fixed, non-trainable 2x2 Haar transform splits features into LL, LH, HL and HH subbands, and WaveletBlocks process the smooth (LL) part and the three directional parts on separate paths. Only the LL output is passed on; the high-frequency path and a third wavelet level are computed but do not affect the output (see the Limitations section of the paper) |
 | **CrossBranchFusion** | At two encoder scales a sigmoid gate `g` blends the two branches per channel and per location: `g*s + (1-g)*w` |
 | **StripAttention** | Cheap 1x7 and 7x1 depthwise strip attention in the bottleneck, aimed at directional blur |
 | **Loss** | `1.0 L1 + 0.1 VGG19 + 0.05 FFT + 0.1 Sobel gradient + 0.02 wavelet high-frequency` |
@@ -96,7 +96,7 @@ What the numbers say:
 
 The model has 9,484,659 parameters and needs 19.57 GMACs at 192x192.
 
-<p align="center"><img src="docs/images/components.jpeg" width="92%" alt="NAFBlock, WaveletBlock and CrossBranchFusion"></p>
+<p align="center"><img src="docs/images/components.png" width="92%" alt="NAFBlock, WaveletBlock and CrossBranchFusion"></p>
 
 ## Reproducibility
 
