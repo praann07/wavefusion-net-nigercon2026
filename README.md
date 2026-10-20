@@ -40,7 +40,7 @@ with torch.no_grad():
 
 ## Results
 
-Each model was trained on the training split of its own dataset and evaluated once on the official test set, at full resolution (single run each).
+Each model was trained on the training split of its own dataset and evaluated once on that dataset's test split, at full resolution (single run each).
 
 | Dataset | Test images | PSNR (dB) | SSIM | Epochs |
 |---|---:|---:|---:|---:|
@@ -92,7 +92,7 @@ All variants use the same seed, split, loss and epoch budget as the full model. 
 
 Every experiment is a Kaggle notebook; step-by-step instructions, expected numbers and run times are in [`docs/REPRODUCE.md`](docs/REPRODUCE.md).
 
-Protocol: each official training set is split 90/10 with seed 42, the best validation checkpoint is selected (validation PSNR at epoch 1, every 10 epochs and the last epoch), and the test set is evaluated once at the end. Nothing from the test set enters any training decision. Training uses AdamW (learning rate 2e-4 with cosine decay to 1e-7, weight decay 1e-4), fp16 mixed precision, gradient clipping at 1.0, batch size 1 with 2 accumulation steps, 192x192 random crops with flips.
+Protocol: each training set is split 90/10 with seed 42, the best validation checkpoint is selected (validation PSNR at epoch 1, every 10 epochs and the last epoch), and the test set is evaluated once at the end. Nothing from the test set enters any training decision. Training uses AdamW (learning rate 2e-4 with cosine decay to 1e-7, weight decay 1e-4), fp16 mixed precision, gradient clipping at 1.0, batch size 1 with 2 accumulation steps, 192x192 random crops with flips.
 
 Each run writes the SHA256 of its sorted train, validation and test file lists (first 12 characters below). `python scripts/verify_splits.py` checks that all runs in this repository share them.
 
