@@ -5,6 +5,7 @@ Dual-branch spatial-wavelet fusion for blind image deblurring. This repository h
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![PyTorch](https://img.shields.io/badge/PyTorch-2.x-EE4C2C)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
+![Release](https://img.shields.io/github/v/release/praann07/wavefusion-net-nigercon2026)
 
 <p align="center">
   <img src="docs/images/architecture.png" width="95%" alt="WaveFusion-Net architecture">
@@ -114,13 +115,26 @@ tests/                 smoke tests for the model
 train/                 full-model notebooks: GoPro, HIDE, RealBlur-J (executed, with logs)
 ablation/              fixed fusion, spatial only, and the interrupted-then-resumed RealBlur-J run
 ablation/new_runs/     L1-only loss, no StripAttention, second-seed run
-results/               split proofs, test evaluations, training histories and figures for every run
+results/results_gopro/        full-model run on GoPro: 10 test samples, training curves, training log
+results/results_hide/         full-model run on HIDE: 10 test samples, training curves, validation metrics
+results/results_realblurj/    full-model run on RealBlur-J: 10 test samples, training curves, validation metrics
+results/ablation_figures/     sample outputs and training curves of every ablation run
+results/ablation_json/        test evaluations and training histories of the ablation runs
+results/split_proofs/         SHA256 split proof of every run
 docs/                  REPRODUCE.md and the images used in this README
 ```
 
 ## Pretrained weights
 
-The best-validation checkpoints of the three full models are attached to the v1.0 release: `wavefusion_gopro_best.pth`, `wavefusion_hide_best.pth` and `wavefusion_realblurj_best.pth` (about 110 MB each). Each file is a dictionary with the keys `model_state_dict`, `optimizer_state_dict`, `split_proof`, `epoch`, `val_psnr` and `val_ssim`. The stored validation scores are 29.70 dB at epoch 100 (GoPro), 26.45 dB at epoch 35 (HIDE) and 30.08 dB at epoch 70 (RealBlur-J). All three load into `wavefusion.WaveFusionNet` with `strict=True`.
+The best-validation checkpoint of each full model is attached to the [v1.0 release](https://github.com/praann07/wavefusion-net-nigercon2026/releases/tag/v1.0).
+
+| Checkpoint | Trained on | Epoch | Validation PSNR | Size |
+|---|---|---:|---:|---:|
+| [`wavefusion_realblurj_best.pth`](https://github.com/praann07/wavefusion-net-nigercon2026/releases/download/v1.0/wavefusion_realblurj_best.pth) | RealBlur-J | 70 | 30.08 dB | 114 MB |
+| [`wavefusion_gopro_best.pth`](https://github.com/praann07/wavefusion-net-nigercon2026/releases/download/v1.0/wavefusion_gopro_best.pth) | GoPro | 100 | 29.70 dB | 114 MB |
+| [`wavefusion_hide_best.pth`](https://github.com/praann07/wavefusion-net-nigercon2026/releases/download/v1.0/wavefusion_hide_best.pth) | HIDE | 35 | 26.45 dB | 114 MB |
+
+`scripts/infer.py` downloads the one you need automatically. Each file is a dictionary with the keys `model_state_dict`, `optimizer_state_dict`, `split_proof`, `epoch`, `val_psnr` and `val_ssim`, and all three load into `wavefusion.WaveFusionNet` with `strict=True`.
 
 ## Notes
 
@@ -129,19 +143,37 @@ The best-validation checkpoints of the three full models are attached to the v1.
 - The RealBlur-J fixed-fusion run was interrupted by a system sleep at epoch 50 and resumed from the epoch-50 weights with a fresh AdamW state. The two notebooks in `ablation/` are its two halves, and their split hashes are identical.
 - Some ablations ran on a local RTX 5060 and the rest on Kaggle, so the notebooks contain outputs from both.
 
+## Paper
+
+The paper is in this repository: [paper/334.pdf](paper/334.pdf). It was presented at the 2026 IEEE Nigeria International Conference on Digital Transformation (NIGERCON), Lagos, 5-6 November 2026.
+
 ## Citation
+
+If you use this code, these results or the paper, please cite:
 
 ```bibtex
 @inproceedings{mamidala2026wavefusionnet,
   title     = {Dual-Branch Spatial-Wavelet Fusion for Blind Image Deblurring},
   author    = {Mamidala, Som Praneeth Babu and Reghunath, Lekshmi Chandrika and
                Imoize, Agbotiname Lucky and Tomazzoli, Claudio and Randieri, Cristian},
-  booktitle = {IEEE NIGERCON},
+  booktitle = {2026 IEEE Nigeria International Conference on Digital Transformation (NIGERCON)},
+  address   = {Lagos, Nigeria},
   year      = {2026},
-  note      = {to appear}
+  note      = {in press},
+  url       = {https://github.com/praann07/wavefusion-net-nigercon2026}
 }
 ```
 
 ## License
 
-The code is released under the [MIT License](LICENSE). The datasets keep their own licenses and are not redistributed here: GoPro (Nah et al., CVPR 2017), HIDE (Shen et al., ICCV 2019) and RealBlur (Rim et al., ECCV 2020). Baseline scores in the paper are taken from the original publications.
+The code, notebooks and experiment records are released under the [MIT License](LICENSE). The datasets keep their own licenses and are not redistributed here: GoPro (Nah et al., CVPR 2017), HIDE (Shen et al., ICCV 2019) and RealBlur (Rim et al., ECCV 2020). Baseline scores in the paper are taken from the original publications.
+
+## Copyright and disclaimer
+
+The paper ([paper/334.pdf](paper/334.pdf)), its text, its figures and its tables are copyright 2026 the authors and IEEE, as stated in the paper's copyright notice. All rights reserved. The PDF is provided for reading and for citation only.
+
+- Do not copy, republish, redistribute or translate the paper, in whole or in part.
+- Do not present this work, its ideas, its figures or its results as your own.
+- If you build on this work, cite it as shown above.
+
+Plagiarism or unauthorised reuse of the paper may be reported to the relevant publisher, conference, journal or institution, and the authors reserve the right to take legal action. The MIT License above covers the source code only, and it does not extend to the paper.

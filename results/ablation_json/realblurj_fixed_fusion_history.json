@@ -1,7 +1,7 @@
 {
   "run_type": "RESUMED from epoch-50 weights (fresh AdamW state; cosine schedule restored to epoch 50)",
   "resume_epoch": 50,
-  "resume_checkpoint": "C:\\Users\\Som Praneeth\\Desktop\\APP\\APP\\APP\\under12hrs_code\\ABLATION\\runs\\run_nogate_realblurj_20260923_164622\\best_model_ablation_nogate_realblurj.pth",
+  "resume_checkpoint": "C:\\Users\\user\\Desktop\\APP\\APP\\APP\\under12hrs_code\\ABLATION\\runs\\run_nogate_realblurj_20260923_164622\\best_model_ablation_nogate_realblurj.pth",
   "val_epochs": [
     1,
     10,
